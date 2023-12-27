@@ -15,13 +15,16 @@ public class Questao09 {
         System.out.println("Digite os minutos do fim: ");
         minutosFinal = scan.nextInt();
 
-        if ((horaFinal > horaIni && minutosFinal >= minutosIni) || (horaFinal == horaIni && minutosFinal >= minutosIni)) {
+        if (horaFinal == horaIni && minutosFinal == minutosIni) {
+            ht = 24;
+            mt = 0;
+        } else if ((horaFinal > horaIni && minutosFinal >= minutosIni) || (horaFinal == horaIni && minutosFinal >= minutosIni)) {
             ht = horaFinal - horaIni;
             mt = minutosFinal - minutosIni;
-        } else if(horaFinal > horaIni && minutosIni > minutosFinal){
+        } else if (horaFinal > horaIni && minutosIni > minutosFinal) {
             ht = horaFinal - horaIni - 1;
             mt = (60 - minutosIni) + minutosFinal;
-        }else {
+        } else {
             ht = (24 - horaIni) + horaFinal;
             mt = (60 - minutosIni) + minutosFinal;
             ht--;

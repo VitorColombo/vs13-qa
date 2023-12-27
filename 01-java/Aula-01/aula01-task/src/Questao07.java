@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class questao07 {
+public class Questao07 {
     public static void main(String[] args) {
         float total, valorProd = 0;
         int qtdProd;

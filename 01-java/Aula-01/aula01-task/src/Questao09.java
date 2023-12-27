@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class questao09 {
+public class Questao09 {
     public static void main(String[] args) {
         int horaIni, horaFinal, minutosIni, minutosFinal;
         int ht,mt;

@@ -1,22 +1,36 @@
 
-import java.util.ArrayList;
-import java.util.List;
 public class Cliente {
     private String nome;
     private String cpf;
-    private List <Endereco> enderecos = new ArrayList<>(2);
-    private List <Contato> contatos = new ArrayList<>(2);
+    public Endereco enderecos[] = new Endereco[2];
+    public Contato contatos[] = new Contato[2];
 
-    public Cliente(String nome, String cpf, Endereco endereco, Contato contato) {
+    public Cliente(String nome, String cpf, Endereco[] enderecos, Contato[] contatos) {
         this.nome = nome;
         this.cpf = cpf;
-        this.enderecos.add(endereco);
-        this.contatos.add(contato);
+        this.enderecos = enderecos;
+        this.contatos = contatos;
     }
 
     public Cliente(String nome, String cpf) {
         this.nome = nome;
         this.cpf = cpf;
+    }
+
+    public Endereco[] getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(Endereco[] enderecos) {
+        this.enderecos = enderecos;
+    }
+
+    public Contato[] getContatos() {
+        return contatos;
+    }
+
+    public void setContatos(Contato[] contatos) {
+        this.contatos = contatos;
     }
 
     void imprimirContatos(){
@@ -57,33 +71,4 @@ public class Cliente {
         this.cpf = cpf;
     }
 
-    public List<Endereco> getEnderecos() {
-        return enderecos;
-    }
-
-    public void setEnderecos(List<Endereco> enderecos) {
-        this.enderecos = enderecos;
-    }
-
-    public List<Contato> getContatos() {
-        return contatos;
-    }
-
-    public void setContatos(List<Contato> contatos) {
-        this.contatos = contatos;
-    }
-
-    public boolean adicionarContato(Contato contato){
-        if (contatos.add(contato)){
-            return true;
-        }
-        return false;
-    }
-
-    public boolean adicionarEndereco(Endereco endereco){
-        if (enderecos.add(endereco)){
-            return true;
-        }
-        return false;
-    }
 }

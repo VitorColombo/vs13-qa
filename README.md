@@ -9,3 +9,10 @@
         Aula 3 - Programação Orientada Obejetos
         Aula 4 - Construtores, Modificadores, Static, Herança e Interfaces
         Aula 5 - OO e Collections
+        Aula 6 - Programação funcional
+        Aula 7 - ENUM e Exceptions
+        Aula 8 - String e Datas
+* ## Módulo 2
+    ### Banco de dados Oracle
+        Aula 1 - Fundamentos
+

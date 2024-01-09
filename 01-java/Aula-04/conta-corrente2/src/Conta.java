@@ -11,6 +11,12 @@ public class Conta implements Movimentacao{
         this.saldo = saldo;
     }
 
+    public Conta(){}
+
+    public Conta(Cliente cliente){
+        this.cliente = cliente;
+    }
+
     public boolean sacar(double valor){
         if (valor <= 0)
             return false;

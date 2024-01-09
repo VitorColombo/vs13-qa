@@ -1,10 +1,12 @@
 CREATE TABLE VEM_SER.ESTUDANTE (
-	id_estudante NUMBER NOT NULL,
-	nome VARCHAR(200) NOT NULL,
-	data_nascimento DATE NOT NULL,
-	nr_matricula NUMBER (10) UNIQUE NOT NULL,
-	ativo CHAR(1) NOT NULL,
-PRIMARY KEY (id_estudante));
+    id_estudante NUMBER NOT NULL,
+    nome VARCHAR(200) NOT NULL,
+    data_nascimento DATE NOT NULL,
+    nr_matricula NUMBER(10) UNIQUE NOT NULL,
+    ativo CHAR(1) NOT NULL CHECK (ativo IN ('S', 'N')),
+    PRIMARY KEY (id_estudante)
+);
+
 
 CREATE SEQUENCE VEM_SER.SEQ_ESTUDANTE
 START WITH 0
@@ -27,7 +29,7 @@ VALUES
 
 INSERT INTO VEM_SER.ESTUDANTE (id_estudante, nome, data_nascimento, nr_matricula, ativo)
 VALUES	
-    (VEM_SER.SEQ_ESTUDANTE.NEXTVAL, 'Pedro Bell', TO_DATE('01-06-2000', 'DD-MM-YYYY'), 6545627890, 'N');
+    (VEM_SER.SEQ_ESTUDANTE.NEXTVAL, 'Pedro Bell', TO_DATE('01-06-2000', 'DD-MM-YYYY'), 6545627890, 'S');
 
 INSERT INTO VEM_SER.ESTUDANTE (id_estudante, nome, data_nascimento, nr_matricula, ativo)
 VALUES

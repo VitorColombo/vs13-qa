@@ -15,4 +15,6 @@
 * ## Módulo 2
     ### Banco de dados Oracle
         Aula 1 - Fundamentos
+        Aula 2 - Relacionamentos
+        Aula 3 - Junções
 

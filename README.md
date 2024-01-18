@@ -18,7 +18,7 @@
         Aula 2 - Relacionamentos
         Aula 3 - Junções
         Aula 3 - JDBC
-  * ## Módulo 3
+* ## Módulo 3
     ### Introdução a QA e Testes Ágeis
         Aula 1 - Teoria de QA
         Aula 2 - Técnicas de Teste

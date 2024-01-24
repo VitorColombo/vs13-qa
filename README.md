@@ -22,4 +22,7 @@
     ### Introdução a QA e Testes Ágeis
         Aula 1 - Teoria de QA
         Aula 2 - Técnicas de Teste
-
+        Aula 3 - Planejamento, Plano de teste e Casos de Teste
+        Aula 4 - Estratégia de testes e abordagem de testes + QA Ágil
+* ## Módulo 4
+        Aula 1 - Introdução ao Teste de API REST

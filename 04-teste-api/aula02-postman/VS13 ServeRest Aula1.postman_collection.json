@@ -4,7 +4,7 @@
 		"name": "VS13 ServeRest Aula1",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "30033207",
-		"_collection_link": "https://crimson-zodiac-622144.postman.co/workspace/a20bf18a-36ad-4439-8d92-7c6561b09140/collection/30033207-8fa88c67-bfb9-4507-8557-95fdb18cd70e?action=share&source=collection_link&creator=30033207"
+		"_collection_link": "https://crimson-zodiac-622144.postman.co/workspace/My-Workspace~a20bf18a-36ad-4439-8d92-7c6561b09140/collection/30033207-8fa88c67-bfb9-4507-8557-95fdb18cd70e?action=share&source=collection_link&creator=30033207"
 	},
 	"item": [
 		{
@@ -775,7 +775,7 @@
 											"    pm.response.to.have.status(200);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Conferindo integridade dos produtos\", function () {\r",
+											"pm.test(\"CT17 Listagem de produtos - Conferindo integridade dos produtos\", function () {\r",
 											"    var jsonData = pm.response.json();\r",
 											"    pm.expect(jsonData.produtos).to.be.an('array').that.is.not.empty;\r",
 											"\r",
@@ -814,6 +814,137 @@
 									],
 									"path": [
 										"produtos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar Produto com filtro no nome sem nenhum cadastrado",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('CT17 Listagem de produtos com filtro no nome sem resultado - Status code: 200', function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos?nome=asdasdasdads",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos"
+									],
+									"query": [
+										{
+											"key": "nome",
+											"value": "asdasdasdads"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar Produto com filtro no nome",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('CT44 Listagem de produtos com filtro no nome - Status code: 200', function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.sendRequest({\r",
+											"    url: 'http://localhost:3000/produtos',\r",
+											"    method: 'GET',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"}, function (err, response) {\r",
+											"    if (err) {\r",
+											"        console.error(err);\r",
+											"        return;\r",
+											"    }\r",
+											"\r",
+											"    const responseData = response.json();\r",
+											"    console.log (responseData);\r",
+											"    if (responseData && responseData.produtos.length >= 0) {\r",
+											"        var nomeProd = responseData.produtos[0].nome;  \r",
+											"        pm.environment.set(\"nome\", pm.variables.replaceIn(nomeProd))\r",
+											"\r",
+											"    } else {\r",
+											"        console.error('Nenhum produto encontrado');\r",
+											"    }\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos?nome={{nome}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos"
+									],
+									"query": [
+										{
+											"key": "nome",
+											"value": "{{nome}}"
+										}
 									]
 								}
 							},
@@ -998,6 +1129,98 @@
 					]
 				},
 				{
+					"name": "PUT",
+					"item": [
+						{
+							"name": "Atualizar Produtos sem permissao",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"nome\", pm.variables.replaceIn(\"EDITADO \" + '{{$randomProduct}}' + '{{$randomInt}}'));\r",
+											"pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+											"pm.environment.set(\"descricao\", pm.variables.replaceIn('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'));\r",
+											"pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: 'http://localhost:3000/produtos',\r",
+											"    method: 'GET',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"}, function (err, response) {\r",
+											"    if (err) {\r",
+											"        console.error(err);\r",
+											"        return;\r",
+											"    }\r",
+											"\r",
+											"    var responseData = response.json();\r",
+											"\r",
+											"    if (responseData && responseData.produtos.length >= 0) {\r",
+											"        var idProd = responseData.produtos[0]._id;  \r",
+											"        pm.environment.set(\"id\", pm.variables.replaceIn(idProd))\r",
+											"\r",
+											"    } else {\r",
+											"        console.error('Nenhum produto encontrado');\r",
+											"    }\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"    pm.test(\"CT29 - Status code: 403\", function () {\r",
+											"        pm.response.to.have.status(403);\r",
+											"    });\r",
+											"\r",
+											"    pm.test(\"CT29 - Resposta deve conter a mensagem 'Rota exclusiva para administradores'\", function () {\r",
+											"        var responseData = pm.response.json();\r",
+											"        pm.expect(responseData.message).to.equal(\"Rota exclusiva para administradores\");\r",
+											"    });"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "DELETE",
 					"item": [
 						{
@@ -1070,98 +1293,6 @@
 								"body": {
 									"mode": "raw",
 									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base_url}}/produtos/:id",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"produtos",
-										":id"
-									],
-									"variable": [
-										{
-											"key": "id",
-											"value": "{{id}}"
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "PUT",
-					"item": [
-						{
-							"name": "Atualizar Produtos sem permissao",
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											"pm.environment.set(\"nome\", pm.variables.replaceIn(\"EDITADO \" + '{{$randomProduct}}' + '{{$randomInt}}'));\r",
-											"pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'));\r",
-											"pm.environment.set(\"descricao\", pm.variables.replaceIn('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'));\r",
-											"pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'));\r",
-											"\r",
-											"pm.sendRequest({\r",
-											"    url: 'http://localhost:3000/produtos',\r",
-											"    method: 'GET',\r",
-											"    header: {\r",
-											"        'Content-Type': 'application/json',\r",
-											"    },\r",
-											"}, function (err, response) {\r",
-											"    if (err) {\r",
-											"        console.error(err);\r",
-											"        return;\r",
-											"    }\r",
-											"\r",
-											"    var responseData = response.json();\r",
-											"\r",
-											"    if (responseData && responseData.produtos.length >= 0) {\r",
-											"        var idProd = responseData.produtos[0]._id;  \r",
-											"        pm.environment.set(\"id\", pm.variables.replaceIn(idProd))\r",
-											"\r",
-											"    } else {\r",
-											"        console.error('Nenhum produto encontrado');\r",
-											"    }\r",
-											"});\r",
-											""
-										],
-										"type": "text/javascript"
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"    pm.test(\"CT29 - Status code: 403\", function () {\r",
-											"        pm.response.to.have.status(403);\r",
-											"    });\r",
-											"\r",
-											"    pm.test(\"CT29 - Resposta deve conter a mensagem 'Rota exclusiva para administradores'\", function () {\r",
-											"        var responseData = pm.response.json();\r",
-											"        pm.expect(responseData.message).to.equal(\"Rota exclusiva para administradores\");\r",
-											"    });"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1528,6 +1659,350 @@
 							]
 						},
 						{
+							"name": "PUT",
+							"item": [
+								{
+									"name": "Atualizar Produtos com sucesso",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"pm.environment.set(\"nome\", pm.variables.replaceIn(\"EDITADO \" + '{{$randomProduct}}' + '{{$randomInt}}'));\r",
+													"pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"pm.environment.set(\"descricao\", pm.variables.replaceIn('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'));\r",
+													"pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"\r",
+													"pm.sendRequest({\r",
+													"    url: 'http://localhost:3000/produtos',\r",
+													"    method: 'GET',\r",
+													"    header: {\r",
+													"        'Content-Type': 'application/json',\r",
+													"    },\r",
+													"}, function (err, response) {\r",
+													"    if (err) {\r",
+													"        console.error(err);\r",
+													"        return;\r",
+													"    }\r",
+													"\r",
+													"    var responseData = response.json();\r",
+													"\r",
+													"    if (responseData && responseData.produtos.length >= 0) {\r",
+													"        var idProd = responseData.produtos[0]._id;  \r",
+													"        pm.environment.set(\"id\", pm.variables.replaceIn(idProd))\r",
+													"\r",
+													"    } else {\r",
+													"        console.error('Nenhum produto encontrado');\r",
+													"    }\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"    pm.test(\"CT42 - Edicao com id valido - Status code: 200\", function () {\r",
+													"        pm.response.to.have.status(200);\r",
+													"    });\r",
+													"\r",
+													"    pm.test(\"CT42 - Edicao com id valido - Registro alterado com sucesso\", function () {\r",
+													"        var responseData = pm.response.json();\r",
+													"        pm.expect(responseData.message).to.equal(\"Registro alterado com sucesso\");\r",
+													"    });"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/produtos/:id",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"produtos",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "{{id}}"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Atualizar Produtos com token expirado",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"pm.environment.set(\"nome\", pm.variables.replaceIn(\"EDITADO \" + '{{$randomProduct}}' + '{{$randomInt}}'));\r",
+													"pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"pm.environment.set(\"descricao\", pm.variables.replaceIn('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'));\r",
+													"pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"\r",
+													"pm.sendRequest({\r",
+													"    url: 'http://localhost:3000/produtos',\r",
+													"    method: 'GET',\r",
+													"    header: {\r",
+													"        'Content-Type': 'application/json',\r",
+													"    },\r",
+													"}, function (err, response) {\r",
+													"    if (err) {\r",
+													"        console.error(err);\r",
+													"        return;\r",
+													"    }\r",
+													"\r",
+													"    var responseData = response.json();\r",
+													"\r",
+													"    if (responseData && responseData.produtos.length >= 0) {\r",
+													"        var idProd = responseData.produtos[0]._id;  \r",
+													"        pm.environment.set(\"id\", pm.variables.replaceIn(idProd))\r",
+													"\r",
+													"    } else {\r",
+													"        console.error('Nenhum produto encontrado');\r",
+													"    }\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"    pm.test(\"CT43 - Edicao com token expirado- Status code: 401\", function () {\r",
+													"        pm.response.to.have.status(401);\r",
+													"    });\r",
+													"\r",
+													"    pm.test(\"CT43 - Edicao com com token expirado - Registro alterado com sucesso\", function () {\r",
+													"        var responseData = pm.response.json();\r",
+													"        pm.expect(responseData.message).to.equal(\"Token de acesso ausente, inválido, expirado ou usuário do token não existe mais\");\r",
+													"    });"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token_expirado}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/produtos/:id",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"produtos",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "{{id}}"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Atualizar Produtos com nome ja em uso",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"\r",
+													"pm.sendRequest({\r",
+													"    url: 'http://localhost:3000/produtos',\r",
+													"    method: 'GET',\r",
+													"    header: {\r",
+													"        'Content-Type': 'application/json',\r",
+													"    },\r",
+													"}, function (err, response) {\r",
+													"    if (err) {\r",
+													"        console.error(err);\r",
+													"        return;\r",
+													"    }\r",
+													"\r",
+													"    var responseData = response.json();\r",
+													"\r",
+													"    if (responseData && responseData.produtos.length > 2) {\r",
+													"        var primeiroProd = responseData.produtos[0];\r",
+													"        var segundoProd = responseData.produtos[1];\r",
+													"        pm.environment.set(\"id\", segundoProd.nome);\r",
+													"\r",
+													"        pm.environment.set(\"nome\", primeiroProd.nome);\r",
+													"        pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"        pm.environment.set(\"descricao\", pm.variables.replaceIn('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'));\r",
+													"        pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"\r",
+													"    } else {\r",
+													"        console.error('Nenhum produto encontrado');\r",
+													"    }\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"    pm.test(\"CT30 - Edicao com nome repetido - Status code: 400\", function () {\r",
+													"        pm.response.to.have.status(400);\r",
+													"    });\r",
+													"\r",
+													"    pm.test(\"CT30 - Edicao com nome repetido - Mensagem de falha na alteracao\", function () {\r",
+													"        var responseData = pm.response.json();\r",
+													"        pm.expect(responseData.message).to.equal(\"Já existe produto com esse nome\");\r",
+													"    });"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/produtos/:id",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"produtos",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "{{id}}"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Atualizar Produtos com id inválido",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"\r",
+													"        pm.environment.set(\"nome\", \"cria prod\" + \"{{$randomInt}}\");\r",
+													"        pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"        pm.environment.set(\"descricao\", pm.variables.replaceIn('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'));\r",
+													"        pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"    pm.test(\"CT32 - Edicao com id invalido - Status code: 201\", function () {\r",
+													"        pm.response.to.have.status(201);\r",
+													"    });\r",
+													"\r",
+													"    pm.test(\"CT32 - Edicao com id invalido - Mensagem de criacao de produto\", function () {\r",
+													"        var responseData = pm.response.json();\r",
+													"        pm.expect(responseData.message).to.equal(\"Cadastro realizado com sucesso\");\r",
+													"    });"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/produtos/:id",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"produtos",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "DELETE",
 							"item": [
 								{
@@ -1738,45 +2213,46 @@
 										}
 									},
 									"response": []
-								}
-							]
-						},
-						{
-							"name": "PUT",
-							"item": [
+								},
 								{
-									"name": "Atualizar Produtos com sucesso",
+									"name": "Excluir Produtos com token expirado",
 									"event": [
 										{
 											"listen": "prerequest",
 											"script": {
 												"exec": [
-													"pm.environment.set(\"nome\", pm.variables.replaceIn(\"EDITADO \" + '{{$randomProduct}}' + '{{$randomInt}}'));\r",
+													"\r",
+													"pm.environment.set(\"nome\", pm.variables.replaceIn('{{$randomProduct}}' + '{{$randomInt}}'));\r",
 													"pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'));\r",
-													"pm.environment.set(\"descricao\", pm.variables.replaceIn('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'));\r",
+													"pm.environment.set\r",
+													"(\"descricao\", pm.variables.replaceIn('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'));\r",
 													"pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'));\r",
 													"\r",
+													"var infoBody = {\r",
+													"    \"nome\": pm.environment.get(\"nome\"),\r",
+													"    \"preco\": pm.environment.get(\"preco\"),\r",
+													"    \"descricao\": pm.environment.get(\"descricao\"),\r",
+													"    \"quantidade\": pm.environment.get(\"quantidade\")\r",
+													"};\r",
+													"\r",
 													"pm.sendRequest({\r",
 													"    url: 'http://localhost:3000/produtos',\r",
-													"    method: 'GET',\r",
+													"    method: 'POST',\r",
 													"    header: {\r",
 													"        'Content-Type': 'application/json',\r",
+													"        'Authorization': 'Bearer ' + pm.environment.get('token_admin')\r",
 													"    },\r",
+													"        body: {\r",
+													"        mode: 'raw',\r",
+													"        raw: JSON.stringify(infoBody)\r",
+													"    }\r",
 													"}, function (err, response) {\r",
 													"    if (err) {\r",
 													"        console.error(err);\r",
 													"        return;\r",
 													"    }\r",
-													"\r",
-													"    var responseData = response.json();\r",
-													"\r",
-													"    if (responseData && responseData.produtos.length >= 0) {\r",
-													"        var idProd = responseData.produtos[0]._id;  \r",
-													"        pm.environment.set(\"id\", pm.variables.replaceIn(idProd))\r",
-													"\r",
-													"    } else {\r",
-													"        console.error('Nenhum produto encontrado');\r",
-													"    }\r",
+													"    const resposta = response.json(); \r",
+													"    pm.environment.set(\"id\", resposta._id);\r",
 													"});\r",
 													""
 												],
@@ -1787,25 +2263,35 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"    pm.test(\"CT42 - Edicao com id valido - Status code: 200\", function () {\r",
-													"        pm.response.to.have.status(200);\r",
+													"    pm.test(\"CT19 Exclusao de produto com token expirado - Status code: 401\", function () {\r",
+													"        pm.response.to.have.status(401);\r",
 													"    });\r",
 													"\r",
-													"    pm.test(\"CT42 - Edicao com id valido - Registro alterado com sucesso\", function () {\r",
-													"        var responseData = pm.response.json();\r",
-													"        pm.expect(responseData.message).to.equal(\"Registro alterado com sucesso\");\r",
-													"    });"
+													"    pm.test(\"CT19 Exclusao de produto com token expirado- Mensagem de nao autorizacao\", function () {\r",
+													"        pm.expect(pm.response.json().message).to.equal(\"Token de acesso ausente, inválido, expirado ou usuário do token não existe mais\");\r",
+													"    });\r",
+													""
 												],
 												"type": "text/javascript"
 											}
 										}
 									],
 									"request": {
-										"method": "PUT",
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token_expirado}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
+											"raw": "",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1825,161 +2311,6 @@
 												{
 													"key": "id",
 													"value": "{{id}}"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Atualizar Produtos com nome ja em uso",
-									"event": [
-										{
-											"listen": "prerequest",
-											"script": {
-												"exec": [
-													"\r",
-													"pm.sendRequest({\r",
-													"    url: 'http://localhost:3000/produtos',\r",
-													"    method: 'GET',\r",
-													"    header: {\r",
-													"        'Content-Type': 'application/json',\r",
-													"    },\r",
-													"}, function (err, response) {\r",
-													"    if (err) {\r",
-													"        console.error(err);\r",
-													"        return;\r",
-													"    }\r",
-													"\r",
-													"    var responseData = response.json();\r",
-													"\r",
-													"    if (responseData && responseData.produtos.length > 2) {\r",
-													"        var primeiroProd = responseData.produtos[0];\r",
-													"        var segundoProd = responseData.produtos[1];\r",
-													"        pm.environment.set(\"id\", segundoProd.nome);\r",
-													"\r",
-													"        pm.environment.set(\"nome\", primeiroProd.nome);\r",
-													"        pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'));\r",
-													"        pm.environment.set(\"descricao\", pm.variables.replaceIn('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'));\r",
-													"        pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'));\r",
-													"\r",
-													"    } else {\r",
-													"        console.error('Nenhum produto encontrado');\r",
-													"    }\r",
-													"});\r",
-													""
-												],
-												"type": "text/javascript"
-											}
-										},
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"    pm.test(\"CT30 - Edicao com nome repetido - Status code: 400\", function () {\r",
-													"        pm.response.to.have.status(400);\r",
-													"    });\r",
-													"\r",
-													"    pm.test(\"CT30 - Edicao com nome repetido - Mensagem de falha na alteracao\", function () {\r",
-													"        var responseData = pm.response.json();\r",
-													"        pm.expect(responseData.message).to.equal(\"Já existe produto com esse nome\");\r",
-													"    });"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{base_url}}/produtos/:id",
-											"host": [
-												"{{base_url}}"
-											],
-											"path": [
-												"produtos",
-												":id"
-											],
-											"variable": [
-												{
-													"key": "id",
-													"value": "{{id}}"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Atualizar Produtos com nome ja em uso Copy",
-									"event": [
-										{
-											"listen": "prerequest",
-											"script": {
-												"exec": [
-													"\r",
-													"        pm.environment.set(\"nome\", \"cria prod\" + \"{{$randomInt}}\");\r",
-													"        pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'));\r",
-													"        pm.environment.set(\"descricao\", pm.variables.replaceIn('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'));\r",
-													"        pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'));\r",
-													"\r",
-													""
-												],
-												"type": "text/javascript"
-											}
-										},
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"    pm.test(\"CT32 - Edicao com id invalido - Status code: 201\", function () {\r",
-													"        pm.response.to.have.status(201);\r",
-													"    });\r",
-													"\r",
-													"    pm.test(\"CT32 - Edicao com id invalido - Mensagem de criacao de produto\", function () {\r",
-													"        var responseData = pm.response.json();\r",
-													"        pm.expect(responseData.message).to.equal(\"Cadastro realizado com sucesso\");\r",
-													"    });"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{base_url}}/produtos/:id",
-											"host": [
-												"{{base_url}}"
-											],
-											"path": [
-												"produtos",
-												":id"
-											],
-											"variable": [
-												{
-													"key": "id",
-													"value": "{{id_invalido}}"
 												}
 											]
 										}

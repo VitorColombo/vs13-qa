@@ -1,0 +1,2086 @@
+{
+	"info": {
+		"_postman_id": "8fa88c67-bfb9-4507-8557-95fdb18cd70e",
+		"name": "VS13 ServeRest Aula1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30033207",
+		"_collection_link": "https://crimson-zodiac-622144.postman.co/workspace/a20bf18a-36ad-4439-8d92-7c6561b09140/collection/30033207-8fa88c67-bfb9-4507-8557-95fdb18cd70e?action=share&source=collection_link&creator=30033207"
+	},
+	"item": [
+		{
+			"name": "LOGIN",
+			"item": [
+				{
+					"name": "Login email invalido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Email inválido - Status code: 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Email inválido - Email deve ser um email válido\", function () {\r",
+									"    pm.expect(pm.response.json().email).to.equal(\"email deve ser um email válido\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"token_admin\", null);\r",
+									"pm.environment.set(\"token\", null);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"letqa.com.br\",\r\n  \"password\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login credenciais incorretas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Credenciais incorretas - Status code 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Credenciais incorretas - Email e/ou senha inválidos\", function () {\r",
+									"    pm.response.to.have.jsonBody(\"message\", \"Email e/ou senha inválidos\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"token_admin\", null);\r",
+									"pm.environment.set(\"token\", null);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"let@qa.com.br\",\r\n  \"password\": \"13123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"var authorization = jsonData.authorization.replace('Bearer ', '');\r",
+									"pm.environment.set(\"token\", authorization);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Login successful\", function () {\r",
+									"    pm.response.to.have.status(200); \r",
+									"    pm.expect(pm.response.json().message).to.equal(\"Login realizado com sucesso\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"token_admin\", null);\r",
+									"pm.environment.set(\"token\", null);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"vitor@qa.com.br\",\r\n  \"password\": \"teste\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "USUARIO",
+			"item": [
+				{
+					"name": "POST",
+					"item": [
+						{
+							"name": "Cadastrar Usuários",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\": \"Vitor Nunes\",\r\n    \"email\": \"vitor@qa.com.br\",\r\n    \"password\": \"teste\",\r\n    \"administrador\": \"false\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cadastrar Usuários automatizado",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// nomes dos melhores QAs que já passaram pelo Vem Ser\r",
+											"const nomes = [\"Adam\", \"Alessandra Mariana\", \"Aron\", \"Assucena\", \"Brayan\", \"Bruno\", \"Camila\", \"Carlos Alberto\", \"Débora\", \"Filipe\", \"Gabriel\", \"Grégori\", \"Helcius\", \"Italo\", \"Janier\", \"João Paulo\", \"Kevin\", \"Lucas\", \"Luísa\", \"Luiz Fellipe\",  \"Pedro Henrique\", \"Pedro\", \"Raphael\", \"Rodrigo\", \"Vinicius\", \"Vitor\", \"Willian\"];\r",
+											"\r",
+											"// sobrenomes dos melhores QAs que já passaram pelo Vem Ser\r",
+											"const sobrenomes = [\"Cardoso\", \"Souza\", \"Rapetto\", \"Araujo\", \"Benet\", \"Scarpari\", \"Junior\", \"Hickmann\", \"Prata\", \"Santos\", \"Nunes\", \"Cabral\", \"Silva\", \"Bonetti\", \"Matos\", \"Lima\", \"Barbosa\", \"Oliveira\", \"Bersch\", \"Costa\", \"Clemente\", \"Nunes\",  \"Rodrigues\"];\r",
+											"\r",
+											"// selecione aleatoriamente nome e sobrenome e adicione à variável de amebiente\r",
+											"pm.environment.set(\"nome\", nomes[_.random(nomes.length - 1)] + \" \" + sobrenomes[_.random(sobrenomes.length - 1)]);\r",
+											"\r",
+											"// selecione aleatoriamente email e adicione à variável de ambiente\r",
+											"pm.environment.set(\"email\", pm.variables.replaceIn('{{$randomEmail}}'))\r",
+											"\r",
+											"// selecione aleatoriamente senha e adicione à variável password\r",
+											"pm.environment.set(\"password\", pm.variables.replaceIn('{{$randomPassword}}'))\r",
+											"\r",
+											"// selecione aleatoriamente um valor booleano e adicione à variável administrador\r",
+											"pm.environment.set(\"administrador\", pm.variables.replaceIn('{{$randomBoolean}}'))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const respData = pm.response.json();\r",
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verifica cadastro de usuario com sucesso\", function (){\r",
+											"    pm.expect(respData.message).to.eql(\"Cadastro realizado com sucesso\")\r",
+											"    pm.expect(respData._id).to.not.be.null\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"{{nome}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"administrador\": \"{{administrador}}\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cadastrar Usuários com email já em uso",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Let Goncalves\",\r\n  \"email\": \"teste@qa.com.br\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cadastrar Usuários com email invalido",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Let Goncalves\",\r\n  \"email\": \"testeqa.com.br\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PUT",
+					"item": [
+						{
+							"name": "Atualizar Usuário por ID",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"LetLetLet Goncalves\",\r\n  \"email\": \"let@qa.com.br\",\r\n  \"password\": \"1\",\r\n  \"administrador\": \"true\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "0uxuPY0cbmQhpEz1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Atualizar Usuário por ID com id nao existente",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"LetLetLet Goncalves\",\r\n  \"password\": \"1\",\r\n  \"email\": \"teste@gmail.com\",\r\n  \"administrador\": \"true\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "asdasdasd"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Atualizar Usuário por ID sem informar o email",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"LetLetLet Goncalves\",\r\n  \"password\": \"1\",\r\n  \"administrador\": \"true\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "0uxuPY0cbmQhpEz1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Atualizar Usuário por ID com email já cadastrado por outro usuário",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"LetLetLet Goncalves\",\r\n  \"password\": \"1\",\r\n  \"email\": \"teste@gmail.com\",\r\n  \"administrador\": \"true\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "0uxuPY0cbmQhpEz1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DELETE",
+					"item": [
+						{
+							"name": "Excluir Usuários",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "dL4yL5SChVXC6dMw"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Excluir Usuários com ID nao cadastrado",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "sssssssss"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Excluir Usuários com ID válido e carrinho cadastrado",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "0uxuPY0cbmQhpEz1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "GET",
+					"item": [
+						{
+							"name": "Buscar Usuário por ID",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "0uxuPY0cbmQhpEz1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar Usuários",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar Usuário por ID inválido",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "dasdasdasdas"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "PRODUTOS",
+			"item": [
+				{
+					"name": "POST",
+					"item": [
+						{
+							"name": "Cadastrar Produtos sem permissão",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"nome\", pm.variables.replaceIn('{{$randomProduct}}'))\r",
+											"\r",
+											"pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'))\r",
+											"\r",
+											"pm.environment.set(\"descricao\", pm.variables.replaceIn\r",
+											"('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'))\r",
+											"\r",
+											"pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"CT27 Cadastrar produtos sem permissao - Status code : 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"CT27 Cadastrar produtos sem permissao - Permissao negada\", function () {\r",
+											"    pm.response.to.have.jsonBody(\"message\", \"Rota exclusiva para administradores\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "GET",
+					"item": [
+						{
+							"name": "Buscar Produto com produtos cadastrados",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('CT17 Listagem de produtos - Status code: 200', function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Conferindo integridade dos produtos\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.produtos).to.be.an('array').that.is.not.empty;\r",
+											"\r",
+											"    jsonData.produtos.forEach(function(produto) {\r",
+											"        pm.expect(produto).to.have.property('nome');\r",
+											"        pm.expect(produto).to.have.property('preco');\r",
+											"        pm.expect(produto).to.have.property('descricao');\r",
+											"        pm.expect(produto).to.have.property('quantidade');\r",
+											"        pm.expect(produto).to.have.property('_id');\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "GET POR ID",
+					"item": [
+						{
+							"name": "Buscar Produtos por ID",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.sendRequest({\r",
+											"    url: 'http://localhost:3000/produtos',\r",
+											"    method: 'GET',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"}, function (err, response) {\r",
+											"    if (err) {\r",
+											"        console.error(err);\r",
+											"        return;\r",
+											"    }\r",
+											"\r",
+											"    var responseData = response.json();\r",
+											"    const id = responseData.produtos[0]._id;\r",
+											"    pm.environment.set(\"id\", pm.variables.replaceIn(id))\r",
+											"    });"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"CT25 Buscar produto pelo id - Status code: 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"CT25 Buscar produto pelo id - Todos os campos do produtos foram buscados\", function () {\r",
+											"    var responseData = pm.response.json();\r",
+											"    pm.expect(responseData.nome, \"Campo 'nome' não deve estar vazio\").to.not.be.empty;\r",
+											"    pm.expect(responseData.preco, \"Campo 'preco' não deve ser nulo\").to.not.be.null;\r",
+											"    pm.expect(responseData.descricao, \"Campo 'descricao' não deve estar vazio\").to.not.be.empty;\r",
+											"    pm.expect(responseData.quantidade, \"Campo 'quantidade' não deve ser nulo\").to.not.be.null;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"CT25 Buscar produto pelo id - ID ambiente existe\", function () {\r",
+											"    var idEnv = pm.environment.get(\"id\");\r",
+											"    pm.expect(idEnv).to.not.be.null;\r",
+											"});\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: 'http://localhost:3000/produtos/',\r",
+											"    method: 'GET',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"}, function (err, response) {\r",
+											"    if (err) {\r",
+											"        console.error(err);\r",
+											"        return;\r",
+											"    }\r",
+											"    var responseData = response.json();\r",
+											"    const primeiroId = responseData.produtos[0]._id;\r",
+											"    var idFromEnvironment = pm.environment.get(\"id\");\r",
+											"    pm.test(\"CT25 Buscar produto pelo id - ID ambiente é igual ao do produto buscado\", function () {\r",
+											"        pm.expect(idFromEnvironment).to.equal(primeiroId);\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar Produtos por ID invalido",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"CT26 Buscar produto com id invalido - Status code: 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"CT26 - Resposta deve conter a mensagem 'Produto não encontrado'\", function () {\r",
+											"    const responseData = pm.response.json();\r",
+											"    pm.expect(responseData.message).to.equal(\"Produto não encontrado\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{id_invalido}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DELETE",
+					"item": [
+						{
+							"name": "Excluir Produtos sem permissao",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.sendRequest({\r",
+											"    url: 'http://localhost:3000/produtos',\r",
+											"    method: 'GET',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"}, function (err, response) {\r",
+											"    if (err) {\r",
+											"        console.error(err);\r",
+											"        return;\r",
+											"    }\r",
+											"    var responseData = response.json();\r",
+											"    if (responseData.produtos.length === 0) {\r",
+											"        console.log('Nenhum produto encontrado');\r",
+											"        return;\r",
+											"    }\r",
+											"    const id = responseData.produtos[0]._id;\r",
+											"    pm.environment.set(\"id\", pm.variables.replaceIn(id))\r",
+											"    });"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"CT28 - Status code: 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"CT28 - Resposta deve conter a mensagem 'Rota exclusiva para administradores'\", function () {\r",
+											"    var responseData = pm.response.json();\r",
+											"    pm.expect(responseData.message).to.equal(\"Rota exclusiva para administradores\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"CT28 - Produto não deve ser removido\", function () {\r",
+											"    pm.sendRequest({\r",
+											"        url: 'http://localhost:3000/produtos/' + pm.environment.get(\"id\"),\r",
+											"        method: 'GET',\r",
+											"        header: {\r",
+											"            'Content-Type': 'application/json',\r",
+											"        },\r",
+											"    }, function (err, response) {\r",
+											"        if (err) {\r",
+											"            console.error(err);\r",
+											"            return;\r",
+											"        }\r",
+											"        console.log(response)\r",
+											"        pm.expect(response.code).to.equal(200);\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PUT",
+					"item": [
+						{
+							"name": "Atualizar Produtos sem permissao",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"nome\", pm.variables.replaceIn(\"EDITADO \" + '{{$randomProduct}}' + '{{$randomInt}}'));\r",
+											"pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+											"pm.environment.set(\"descricao\", pm.variables.replaceIn('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'));\r",
+											"pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: 'http://localhost:3000/produtos',\r",
+											"    method: 'GET',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"}, function (err, response) {\r",
+											"    if (err) {\r",
+											"        console.error(err);\r",
+											"        return;\r",
+											"    }\r",
+											"\r",
+											"    var responseData = response.json();\r",
+											"\r",
+											"    if (responseData && responseData.produtos.length >= 0) {\r",
+											"        var idProd = responseData.produtos[0]._id;  \r",
+											"        pm.environment.set(\"id\", pm.variables.replaceIn(idProd))\r",
+											"\r",
+											"    } else {\r",
+											"        console.error('Nenhum produto encontrado');\r",
+											"    }\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"    pm.test(\"CT29 - Status code: 403\", function () {\r",
+											"        pm.response.to.have.status(403);\r",
+											"    });\r",
+											"\r",
+											"    pm.test(\"CT29 - Resposta deve conter a mensagem 'Rota exclusiva para administradores'\", function () {\r",
+											"        var responseData = pm.response.json();\r",
+											"        pm.expect(responseData.message).to.equal(\"Rota exclusiva para administradores\");\r",
+											"    });"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "ADMIN",
+			"item": [
+				{
+					"name": "LOGIN",
+					"item": [
+						{
+							"name": "Login admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"var authorization = jsonData.authorization.replace('Bearer ', '');\r",
+											"pm.environment.set(\"token_admin\", authorization);\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Login successful\", function () {\r",
+											"    pm.response.to.have.status(200); \r",
+											"    pm.expect(pm.response.json().message).to.equal(\"Login realizado com sucesso\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"token_admin\", null);\r",
+											"pm.environment.set(\"token\", null);\r",
+											"var email = pm.environment.get(\"email_admin\");\r",
+											"var password = pm.environment.get(\"password_admin\");\r",
+											"\r",
+											"pm.environment.set(\"email\", email);\r",
+											"\r",
+											"pm.environment.set(\"password\", password);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": {{email}},\r\n  \"password\": {{password}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PRODUTOS",
+					"item": [
+						{
+							"name": "POST",
+							"item": [
+								{
+									"name": "Cadastrar Produtos",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"\r",
+													"pm.environment.set(\"nome\", pm.variables.replaceIn('{{$randomProduct}}' + \" \" + '{{$randomInt}}'))\r",
+													"\r",
+													"pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'))\r",
+													"\r",
+													"pm.environment.set(\"descricao\", pm.variables.replaceIn\r",
+													"('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'))\r",
+													"\r",
+													"pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'))\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"\r",
+													"pm.test(\"CT22 Cadastrar produto com sucesso - Status code : 201\", function () {\r",
+													"    pm.response.to.have.status(201);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"CT22 Cadastrar produtos com sucesso - Permissao concedida\", function () {\r",
+													"    pm.response.to.have.jsonBody(\"message\", \"Cadastro realizado com sucesso\");\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/produtos",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"produtos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Cadastrar Produtos com nome já em uso",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"pm.sendRequest({\r",
+													"    url: 'http://localhost:3000/produtos',\r",
+													"    method: 'GET',\r",
+													"    header: {\r",
+													"        'Content-Type': 'application/json',\r",
+													"    },\r",
+													"}, function (err, response) {\r",
+													"    if (err) {\r",
+													"        console.error(err);\r",
+													"        return;\r",
+													"    }\r",
+													"\r",
+													"    var responseData = response.json();\r",
+													"\r",
+													"    if (responseData && responseData.produtos.length >= 0) {\r",
+													"        var nomeEmUso = responseData.produtos[0].nome;  \r",
+													"        pm.environment.set(\"nome\", nomeEmUso);\r",
+													"        pm.environment.set(\"nome\", pm.variables.replaceIn(nomeEmUso))\r",
+													"\r",
+													"    } else {\r",
+													"        console.error('Nenhum produto encontrado');\r",
+													"    }\r",
+													"});\r",
+													"\r",
+													"pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'))\r",
+													"\r",
+													"pm.environment.set(\"descricao\", pm.variables.replaceIn\r",
+													"('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'))\r",
+													"\r",
+													"pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'))"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"CT23 Cadastrar produto com nome já em uso - Status code : 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"CT23 Cadastrar produto com nome já em uso - Permissao concedida\", function () {\r",
+													"    pm.response.to.have.jsonBody(\"message\", \"Já existe produto com esse nome\");\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/produtos",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"produtos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Cadastrar Produtos com token expirado",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"\r",
+													"pm.environment.set(\"nome\", pm.variables.replaceIn('{{$randomProduct}}'))\r",
+													"\r",
+													"pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'))\r",
+													"\r",
+													"pm.environment.set(\"descricao\", pm.variables.replaceIn\r",
+													"('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'))\r",
+													"\r",
+													"pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'))"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"CT24 Cadastrar produtos com token expirado - Permissao concedida\", function () {\r",
+													"    pm.response.to.have.jsonBody(\"message\", \"Token de acesso ausente, inválido, expirado ou usuário do token não existe mais\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"CT24 Cadastrar produto com token expirado - Status code : 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token_expirado}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/produtos",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"produtos"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "DELETE",
+							"item": [
+								{
+									"name": "Excluir Produtos com id válido adicionado a um carrinho",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/produtos/:id",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"produtos",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "{{id}}"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Excluir Produtos com id invalido",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"\r",
+													"const randomId = Math.floor(Math.random() * (9999999999 - 10000000 + 1)) + 100000;\r",
+													"\r",
+													"pm.environment.set('id', randomId);\r",
+													"\r",
+													"console.log('Generated ID:', randomId);\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"\r",
+													"pm.test(\"CT21 Excluir produto com ID invalido - Status code: 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"\r",
+													"});\r",
+													"pm.test(\"CT21 - Excluir produto com ID invalido - Nenhum produto excluido\", function () {\r",
+													"    pm.response.to.have.jsonBody({\r",
+													"        message: \"Nenhum registro excluído\"\r",
+													"    });\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/produtos/:id",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"produtos",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "{{id}}"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Excluir Produtos com sucesso",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"\r",
+													"pm.environment.set(\"nome\", pm.variables.replaceIn('{{$randomProduct}}' + '{{$randomInt}}'));\r",
+													"pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"pm.environment.set\r",
+													"(\"descricao\", pm.variables.replaceIn('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'));\r",
+													"pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"\r",
+													"var infoBody = {\r",
+													"    \"nome\": pm.environment.get(\"nome\"),\r",
+													"    \"preco\": pm.environment.get(\"preco\"),\r",
+													"    \"descricao\": pm.environment.get(\"descricao\"),\r",
+													"    \"quantidade\": pm.environment.get(\"quantidade\")\r",
+													"};\r",
+													"\r",
+													"pm.sendRequest({\r",
+													"    url: 'http://localhost:3000/produtos',\r",
+													"    method: 'POST',\r",
+													"    header: {\r",
+													"        'Content-Type': 'application/json',\r",
+													"        'Authorization': 'Bearer ' + pm.environment.get('token_admin')\r",
+													"    },\r",
+													"        body: {\r",
+													"        mode: 'raw',\r",
+													"        raw: JSON.stringify(infoBody)\r",
+													"    }\r",
+													"}, function (err, response) {\r",
+													"    if (err) {\r",
+													"        console.error(err);\r",
+													"        return;\r",
+													"    }\r",
+													"    const resposta = response.json(); \r",
+													"    pm.environment.set(\"id\", resposta._id);\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"    pm.test(\"CT19 Exclusao de produto com sucesso - Status code: 200\", function () {\r",
+													"        pm.response.to.have.status(200);\r",
+													"    });\r",
+													"\r",
+													"    pm.test(\"CT19 Exclusao de produto - Mensagem sucesso\", function () {\r",
+													"        pm.expect(pm.response.json().message).to.equal(\"Registro excluído com sucesso\");\r",
+													"    });\r",
+													"\r",
+													"pm.test(\"CT19 Exclusao de produto - Produto foi removido\", function () {\r",
+													"    pm.sendRequest({\r",
+													"        url: 'http://localhost:3000/produtos/' + pm.environment.get(\"id\"),\r",
+													"        method: 'GET',\r",
+													"        header: {\r",
+													"            'Content-Type': 'application/json',\r",
+													"        },\r",
+													"    }, function (err, response) {\r",
+													"        if (err) {\r",
+													"            console.error(err);\r",
+													"            return;\r",
+													"        }\r",
+													"        pm.expect(response.code).to.equal(400);\r",
+													"    });\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/produtos/:id",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"produtos",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "{{id}}"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "PUT",
+							"item": [
+								{
+									"name": "Atualizar Produtos com sucesso",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"pm.environment.set(\"nome\", pm.variables.replaceIn(\"EDITADO \" + '{{$randomProduct}}' + '{{$randomInt}}'));\r",
+													"pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"pm.environment.set(\"descricao\", pm.variables.replaceIn('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'));\r",
+													"pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"\r",
+													"pm.sendRequest({\r",
+													"    url: 'http://localhost:3000/produtos',\r",
+													"    method: 'GET',\r",
+													"    header: {\r",
+													"        'Content-Type': 'application/json',\r",
+													"    },\r",
+													"}, function (err, response) {\r",
+													"    if (err) {\r",
+													"        console.error(err);\r",
+													"        return;\r",
+													"    }\r",
+													"\r",
+													"    var responseData = response.json();\r",
+													"\r",
+													"    if (responseData && responseData.produtos.length >= 0) {\r",
+													"        var idProd = responseData.produtos[0]._id;  \r",
+													"        pm.environment.set(\"id\", pm.variables.replaceIn(idProd))\r",
+													"\r",
+													"    } else {\r",
+													"        console.error('Nenhum produto encontrado');\r",
+													"    }\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"    pm.test(\"CT42 - Edicao com id valido - Status code: 200\", function () {\r",
+													"        pm.response.to.have.status(200);\r",
+													"    });\r",
+													"\r",
+													"    pm.test(\"CT42 - Edicao com id valido - Registro alterado com sucesso\", function () {\r",
+													"        var responseData = pm.response.json();\r",
+													"        pm.expect(responseData.message).to.equal(\"Registro alterado com sucesso\");\r",
+													"    });"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/produtos/:id",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"produtos",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "{{id}}"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Atualizar Produtos com nome ja em uso",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"\r",
+													"pm.sendRequest({\r",
+													"    url: 'http://localhost:3000/produtos',\r",
+													"    method: 'GET',\r",
+													"    header: {\r",
+													"        'Content-Type': 'application/json',\r",
+													"    },\r",
+													"}, function (err, response) {\r",
+													"    if (err) {\r",
+													"        console.error(err);\r",
+													"        return;\r",
+													"    }\r",
+													"\r",
+													"    var responseData = response.json();\r",
+													"\r",
+													"    if (responseData && responseData.produtos.length > 2) {\r",
+													"        var primeiroProd = responseData.produtos[0];\r",
+													"        var segundoProd = responseData.produtos[1];\r",
+													"        pm.environment.set(\"id\", segundoProd.nome);\r",
+													"\r",
+													"        pm.environment.set(\"nome\", primeiroProd.nome);\r",
+													"        pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"        pm.environment.set(\"descricao\", pm.variables.replaceIn('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'));\r",
+													"        pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"\r",
+													"    } else {\r",
+													"        console.error('Nenhum produto encontrado');\r",
+													"    }\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"    pm.test(\"CT30 - Edicao com nome repetido - Status code: 400\", function () {\r",
+													"        pm.response.to.have.status(400);\r",
+													"    });\r",
+													"\r",
+													"    pm.test(\"CT30 - Edicao com nome repetido - Mensagem de falha na alteracao\", function () {\r",
+													"        var responseData = pm.response.json();\r",
+													"        pm.expect(responseData.message).to.equal(\"Já existe produto com esse nome\");\r",
+													"    });"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/produtos/:id",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"produtos",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "{{id}}"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Atualizar Produtos com nome ja em uso Copy",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"\r",
+													"        pm.environment.set(\"nome\", \"cria prod\" + \"{{$randomInt}}\");\r",
+													"        pm.environment.set(\"preco\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"        pm.environment.set(\"descricao\", pm.variables.replaceIn('{{$randomProductAdjective}} made of {{$randomProductMaterial}} by {{$randomCompanyName}}'));\r",
+													"        pm.environment.set(\"quantidade\", pm.variables.replaceIn('{{$randomInt}}'));\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"    pm.test(\"CT32 - Edicao com id invalido - Status code: 201\", function () {\r",
+													"        pm.response.to.have.status(201);\r",
+													"    });\r",
+													"\r",
+													"    pm.test(\"CT32 - Edicao com id invalido - Mensagem de criacao de produto\", function () {\r",
+													"        var responseData = pm.response.json();\r",
+													"        pm.expect(responseData.message).to.equal(\"Cadastro realizado com sucesso\");\r",
+													"    });"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"preco\": {{preco}},\r\n    \"descricao\": \"{{descricao}}\", \r\n    \"quantidade\": {{quantidade}}\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/produtos/:id",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"produtos",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "{{id_invalido}}"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token_admin}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token_admin}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

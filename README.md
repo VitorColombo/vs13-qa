@@ -26,3 +26,4 @@
         Aula 4 - Estratégia de testes e abordagem de testes + QA Ágil
 * ## Módulo 4
         Aula 1 - Introdução ao Teste de API REST
+        Aula 2 - Testes de API REST (Postman I)

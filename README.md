@@ -28,4 +28,5 @@
         Aula 1 - Introdução ao Teste de API REST
         Aula 2 - Testes de API REST (Postman I)
         Aula 3 - Teste de API REST (Postman II)
-        Aula 4 - REST Assured (Parte 1)
+        Aula 4 - REST Assured (Requisições, JUnit, Hamcrest, Contrato)
+        Aula 5 - REST Assured (Serialização/Deserialização + Assertions)

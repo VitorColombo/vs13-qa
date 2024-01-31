@@ -2,10 +2,9 @@ package com.vemser.tests.produtos;
 
 import client.ProdutoClient;
 import data.factory.ProdutoDataFactory;
-import data.factory.UsuarioDataFactory;
+import io.restassured.response.Response;
 import model.*;
 import org.junit.jupiter.api.Test;
-import utils.Auth;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -111,6 +110,49 @@ public class ProdutosFuncionalTest {
     }
 
     @Test
+    public void testEditarProdutoComIDNaoCadastrado(){
+        Produto produtoEditado = ProdutoDataFactory.produtoValido();
+        ProdutoResponse produtoResponse = produtoClient.atualizarProduto("idInvalido", produtoEditado)
+            .then()
+                .statusCode(201)
+                .extract()
+                .as(ProdutoResponse.class)
+                ;
+        assertAll("EditarProdutoResponse",
+                () -> assertEquals("Cadastro realizado com sucesso", produtoResponse.getMessage()),
+                () -> assertNotNull(produtoResponse.get_id())
+        );
+        ProdutoResponse produtoBuscado = produtoClient.buscarProdutoPorId(produtoResponse.get_id())
+            .then()
+                .extract()
+                .as(ProdutoResponse.class)
+                ;
+        assertAll("produtoBuscado",
+                () -> assertEquals(produtoEditado.getNome(), produtoBuscado.getNome()),
+                () -> assertEquals(produtoEditado.getPreco(), produtoBuscado.getPreco()),
+                () -> assertEquals(produtoEditado.getDescricao(), produtoBuscado.getDescricao()),
+                () -> assertEquals(produtoEditado.getQuantidade(), produtoBuscado.getQuantidade())
+        );
+    }
+
+    @Test
+    public void testEditarProdutoComNomeJaCadastrado(){
+        Produto produtoCriado = ProdutoDataFactory.produtoValido();
+        produtoClient.cadastrarProduto(produtoCriado).as(ProdutoResponse.class);
+
+        Produto produtoEditado = ProdutoDataFactory.produtoValido();
+        produtoEditado.setNome(produtoCriado.getNome());
+
+        ProdutoResponse produtoResponse = produtoClient.atualizarProduto("idInvalido",produtoEditado)
+            .then()
+                .statusCode(400)
+                .extract()
+                .as(ProdutoResponse.class)
+                ;
+        assertEquals("Já existe produto com esse nome", produtoResponse.getMessage());
+    }
+
+    @Test
     public void testEditarProdutoSemTokenValido(){
         Produto produto = ProdutoDataFactory.produtoValido();
         ProdutoResponse produtoCadastrado = produtoClient.cadastrarProduto(produto).as(ProdutoResponse.class);
@@ -172,6 +214,20 @@ public class ProdutosFuncionalTest {
                 () -> assertTrue(produtosRes.getProdutos().size() > 0),
                 () -> assertEquals(produtosRes.getProdutos().get(0).getNome(), produto.getNome())
         );
+    }
+
+    @Test
+    public void testeBuscarTodosProdutosCadastradosComFiltroNomeGrande() {
+        Produto produto = ProdutoDataFactory.produtoComNomeExtenso();
+        ProdutoResponse produtoResponse = produtoClient.cadastrarProduto(produto).as(ProdutoResponse.class);
+
+        Response response = produtoClient.buscarTodosProdutosComFiltroNome(produto.getNome())
+            .then()
+                .statusCode(431)
+                .extract()
+                .response()
+            ;
+        assertEquals("HTTP/1.1 431 Request Header Fields Too Large", response.getStatusLine());
     }
 
     @Test
@@ -245,15 +301,27 @@ public class ProdutosFuncionalTest {
 
     @Test
     public void testExcluirProdutosSemPermissao(){
-            ProdutoResponse produtoCadastrado = produtoClient.cadastrarProduto(
-                    ProdutoDataFactory.produtoValido()).as(ProdutoResponse.class);
+        ProdutoResponse produtoCadastrado = produtoClient.cadastrarProduto(
+                ProdutoDataFactory.produtoValido()).as(ProdutoResponse.class);
 
-            ProdutoResponse produtoResDelete = produtoClient.deletarProdutoSemPermissao(produtoCadastrado.get_id())
-                .then()
-                    .statusCode(403)
-                    .extract()
-                    .as(ProdutoResponse.class)
-                ;
-            assertEquals("Rota exclusiva para administradores", produtoResDelete.getMessage());
-        }
+        ProdutoResponse produtoResDelete = produtoClient.deletarProdutoSemPermissao(produtoCadastrado.get_id())
+            .then()
+                .statusCode(403)
+                .extract()
+                .as(ProdutoResponse.class)
+            ;
+        assertEquals("Rota exclusiva para administradores", produtoResDelete.getMessage());
+    }
+
+    @Test
+    public void testExcluirProdutosComIdInvalido(){
+        ProdutoResponse produtoResDelete = produtoClient.deletarProduto("idInvalido")
+            .then()
+                .statusCode(200)
+                .extract()
+                .as(ProdutoResponse.class)
+            ;
+        assertEquals("Nenhum registro excluído", produtoResDelete.getMessage());
+    }
+
 }

@@ -42,7 +42,19 @@ public class ProdutoDataFactory {
         Produto produtoComQtdZero = novoProduto();
         produtoComQtdZero.setQuantidade("0");
         produtoComQtdZero.setPreco("0");
+
         return produtoComQtdZero;
     }
+
+    public static Produto produtoComNomeExtenso() {
+        Produto novoProduto = new Produto();
+        novoProduto.setNome(faker.lorem().characters(30000, 30001));
+        novoProduto.setPreco(String.valueOf((faker.number().numberBetween(1, 1000))));
+        novoProduto.setDescricao(faker.lorem().characters(10, 100));
+        novoProduto.setQuantidade(String.valueOf((faker.number().numberBetween(1, 100))));
+
+        return novoProduto;
+    }
+
 
 }

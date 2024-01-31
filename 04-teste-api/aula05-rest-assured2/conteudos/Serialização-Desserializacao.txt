@@ -1,0 +1,34 @@
+//Serialização
+
+//JSON
+{
+	"message": "Hello World"
+}
+
+//Classe POJO
+public class Message{
+	private String message;
+
+	public String getMessage(){
+		return this.message;
+	}
+	
+	public void setMessage(String message){
+		this message = message;
+	}
+}
+
+
+//Rest Assured
+//objeto JAVA
+Message message = new Message();
+message.setMessage("Hello World");
+
+given()
+	.contentType(ContentType.JSON)
+	.body(message)
+.when()
+	.post("/message")
+;
+
+//Desserialização

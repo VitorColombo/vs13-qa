@@ -1,4 +1,4 @@
-package com.vemser.tests;
+package com.vemser.tests.basico.desafio;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,17 +9,16 @@ public class OlaMundoTest {
     @Test
     public void testBuscarUsuarioPorIDComSucesso() {
 
-        //Definir URL da API
-        baseURI = "https://reqres.in/";
+        // Definir URL
+        baseURI = "https://reqres.in";
 
         given()
                 .log().all()
-                .contentType("application/json")
-            .when()
+        .when()
                 .get("/api/users/2")
-
-            .then()
+        .then()
                 .log().all()
-                .statusCode(200);
+                .statusCode(200)
+        ;
     }
 }

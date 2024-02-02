@@ -1,3 +1,7 @@
+# vs13-qa
+
+## Repositório criado para aprendizado e entrega das atividades realizadas durante o Vem Ser 13.
+
 <details>
   <summary><strong>Módulo 1 - Java ☕</strong></summary>
 

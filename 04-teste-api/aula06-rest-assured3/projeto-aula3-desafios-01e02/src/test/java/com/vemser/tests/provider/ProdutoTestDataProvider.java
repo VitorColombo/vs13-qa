@@ -1,12 +1,11 @@
-package com.vemser.tests.produtos;
-import io.restassured.response.Response;
+package com.vemser.tests.provider;
 import model.Produto;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.params.provider.Arguments;
+
 import java.util.stream.Stream;
 import static data.factory.ProdutoDataFactory.*;
 
-public class ProdutoTestDataFactory {
+public class ProdutoTestDataProvider {
     public static Produto dadosAusentes = produtoComDadosAusentes();
     public static Produto precoZero = produtoComPrecoZero();
     public static Produto nomeVazio = produtoComNomeVazio();
@@ -17,7 +16,8 @@ public class ProdutoTestDataFactory {
     private static Stream<Arguments> produtosComDadosInvalidos(){
         return Stream.of(
                 Arguments.of(dadosAusentes,
-                        new String[] {"nome não pode ficar em branco", "descricao não pode ficar em branco", "preco deve ser um número", "quantidade deve ser um número"}
+                        new String[] {"nome não pode ficar em branco", "descricao não pode ficar em branco",
+                                      "preco deve ser um número", "quantidade deve ser um número"}
                 ),
                 Arguments.of(precoZero,
                         new String[] {"preco deve ser um número positivo"}

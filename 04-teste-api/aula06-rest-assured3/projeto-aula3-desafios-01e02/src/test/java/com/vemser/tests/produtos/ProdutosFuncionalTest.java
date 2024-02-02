@@ -32,7 +32,7 @@ public class ProdutosFuncionalTest {
     }
 
     @ParameterizedTest
-    @MethodSource("com.vemser.tests.produtos.ProdutoTestDataFactory#produtosComDadosInvalidos")
+    @MethodSource("com.vemser.tests.provider.ProdutoTestDataProvider#produtosComDadosInvalidos")
     public void testCadastrarProdutoComDadosInvalidos(Produto produto, String[] mensagensEsperadas) {
         ProdutoResponse produtoResponse = produtoClient.cadastrarProduto(produto)
                 .then()

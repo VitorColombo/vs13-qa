@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/produtos/1"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "_id": "1",
+      "nome": "Produto 1",
+      "preco": 100,
+      "descricao": "Descrição do produto 1",
+      "quantidade": 10
+    }
+  }
+}

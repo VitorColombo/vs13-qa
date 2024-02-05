@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/produtos"
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "_id": "1",
+      "message": "Cadastro realizado com sucesso"
+    }
+  }
+}
+

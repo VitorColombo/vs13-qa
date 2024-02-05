@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/produtos"
+  },
+  "response": {
+    "status": 400,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "message": "Já existe produto com esse nome"
+    }
+  }
+}

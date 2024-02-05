@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/produtos/1a2asd"
+  },
+  "response": {
+    "status": 400,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "message": "Produto não encontrado"
+    }
+  }
+}

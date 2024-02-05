@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/produtos"
+  },
+  "response": {
+    "status": 403,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "message": "Rota exclusiva para administradores"
+    }
+  }
+}

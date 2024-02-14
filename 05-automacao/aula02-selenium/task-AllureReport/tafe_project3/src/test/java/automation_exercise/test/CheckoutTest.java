@@ -5,12 +5,16 @@ import com.vemser.php_travel.data.dto.AddressDto;
 import com.vemser.php_travel.data.dto.CreateAccountDto;
 import com.vemser.php_travel.data.factory.datafaker.AddressData;
 import com.vemser.php_travel.data.factory.datafaker.CreateAccountData;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.JavascriptExecutor;
 
 import static com.vemser.php_travel.data.factory.seleniumfactory.SeleniumFactory.driver;
 
+@Epic("Checkout")
 public class CheckoutTest extends BaseTest {
 
     HomePage homePage = new HomePage();
@@ -25,6 +29,8 @@ public class CheckoutTest extends BaseTest {
     AddressData addressData = new AddressData();
 
     @Test
+    @Feature("Checkout")
+    @Story("Checkout with account setted")
     public void testCheckoutWithAccountSetted() {
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
@@ -67,6 +73,8 @@ public class CheckoutTest extends BaseTest {
     }
 
     @Test
+    @Feature("Checkout")
+    @Story("Checkout without account setted")
     public void testCheckoutWithoutAddress() {
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
@@ -110,6 +118,8 @@ public class CheckoutTest extends BaseTest {
     }
 
     @Test
+    @Feature("Checkout")
+    @Story("Checkout without an user")
     public void testCheckoutWithoutAnUser() {
         JavascriptExecutor js = (JavascriptExecutor) driver;
 

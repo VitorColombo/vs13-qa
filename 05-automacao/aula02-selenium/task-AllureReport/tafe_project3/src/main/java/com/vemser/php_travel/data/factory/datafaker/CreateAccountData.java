@@ -17,4 +17,18 @@ public class CreateAccountData {
 
         return createAccountDto;
     }
+    public CreateAccountDto createAccountEmailOnly() {
+        CreateAccountDto createAccountDto = new CreateAccountDto();
+
+        createAccountDto.setEmail("EMAILINVALID");
+
+        return createAccountDto;
+    }
+    public CreateAccountDto createAccountEmailNotRegistered() {
+        CreateAccountDto createAccountDto = new CreateAccountDto();
+
+        createAccountDto.setEmail(dataFakerGenerator.emailFaker());
+
+        return createAccountDto;
+    }
 }

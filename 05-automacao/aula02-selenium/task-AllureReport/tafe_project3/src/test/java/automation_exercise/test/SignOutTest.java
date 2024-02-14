@@ -6,9 +6,13 @@ import automation_exercise.page.HomePage;
 import automation_exercise.page.MyAccountPage;
 import com.vemser.php_travel.data.dto.CreateAccountDto;
 import com.vemser.php_travel.data.factory.datafaker.CreateAccountData;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.Assert;
 import org.junit.Test;
 
+@Epic("Sign Out")
 public class SignOutTest extends BaseTest {
     HomePage homePage = new HomePage();
     AuthenticationPage authPage = new AuthenticationPage();
@@ -17,6 +21,8 @@ public class SignOutTest extends BaseTest {
     private final CreateAccountData createAccountData = new CreateAccountData();
 
     @Test
+    @Feature("Sign Out")
+    @Story("Sign Out before creating account")
     public void validateSignOutBeforeCreatingAccount() {
         CreateAccountDto account = createAccountData.createAccountValidData();
 

@@ -4,15 +4,21 @@ import automation_exercise.page.ContactUsPage;
 import automation_exercise.page.HomePage;
 import com.vemser.php_travel.data.dto.ContactUsDto;
 import com.vemser.php_travel.data.factory.datafaker.ContactUsData;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.Assert;
 import org.junit.Test;
 
+@Epic("Contact Us")
 public class ContactUsTest extends BaseTest {
     HomePage homePage = new HomePage();
     ContactUsPage contactUsPage = new ContactUsPage();
     ContactUsData contactUsData = new ContactUsData();
 
     @Test
+    @Feature("Contact Service")
+    @Story("Contact Customer Service with valid data")
     public void testContactCustomerServiceWithValidData(){
         homePage.clicarContactUs();
 
@@ -30,6 +36,8 @@ public class ContactUsTest extends BaseTest {
 
     }
     @Test
+    @Feature("Contact Service")
+    @Story("Contact Customer Service with invalid data")
     public void testContactCustomerServiceWithInValidData(){
         homePage.clicarContactUs();
 

@@ -3,9 +3,13 @@ package automation_exercise.test;
 import automation_exercise.page.*;
 import com.vemser.php_travel.data.dto.CreateAccountDto;
 import com.vemser.php_travel.data.factory.datafaker.CreateAccountData;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.Assert;
 import org.junit.Test;
 
+@Epic("Update User Information")
 public class UpdateUserInformationTest extends BaseTest {
     private final CreateAccountData createAccountData = new CreateAccountData();
     private final CreateAccountPage createAccountPage = new CreateAccountPage();
@@ -15,6 +19,8 @@ public class UpdateUserInformationTest extends BaseTest {
     private final MyPersonalInformationPage myPersonalInformationPage = new MyPersonalInformationPage();
 
     @Test
+    @Feature("Update User Information")
+    @Story("Update User Information with valid password")
     public void testUpdateInformationWithValidPassword() {
         CreateAccountDto account = createAccountData.createAccountValidData();
         homePage.navigateToSignIn();
@@ -49,6 +55,8 @@ public class UpdateUserInformationTest extends BaseTest {
         homePage.clicarHomeButton();
     }
     @Test
+    @Feature("Update User Information")
+    @Story("Update User Information with invalid password")
     public void testUpdateInformationWithInvalidPassword() {
         CreateAccountDto account = createAccountData.createAccountValidData();
         homePage.navigateToSignIn();

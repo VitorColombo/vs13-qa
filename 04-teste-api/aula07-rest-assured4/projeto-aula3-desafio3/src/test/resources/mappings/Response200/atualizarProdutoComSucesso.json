@@ -8,8 +8,6 @@
     "headers": {
       "Content-Type": "application/json"
     },
-    "jsonBody": {
-      "message": "Registro alterado com sucesso"
-    }
+    "bodyFileName": "response200Put.json"
   }
 }

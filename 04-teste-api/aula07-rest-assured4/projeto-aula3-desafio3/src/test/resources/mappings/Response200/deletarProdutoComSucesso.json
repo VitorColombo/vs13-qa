@@ -8,8 +8,6 @@
     "headers": {
       "Content-Type": "application/json"
     },
-    "jsonBody": {
-      "message": "Registro excluído com sucesso | Nenhum registro excluído"
-    }
+      "bodyFileName": "response200Delete.json"
   }
 }

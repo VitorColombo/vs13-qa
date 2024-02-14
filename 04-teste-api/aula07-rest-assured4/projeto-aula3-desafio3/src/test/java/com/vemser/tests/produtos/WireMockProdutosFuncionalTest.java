@@ -15,8 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import utils.Auth;
-
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
@@ -77,7 +75,7 @@ public class WireMockProdutosFuncionalTest {
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBodyFile("mappings/Response200/deletarProdutoComSucesso.json")));
+                        .withBodyFile("__files/response200Delete.json")));
 
         ProdutoResponse response =
                 given()
@@ -100,7 +98,7 @@ public class WireMockProdutosFuncionalTest {
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBodyFile("mappings/Response200/atualizarProdutoComSucesso.json")));
+                        .withBodyFile("__files/response200Put.json")));
 
         Produto produto = new Produto();
         produto.setNome("Produto EDITADO");
